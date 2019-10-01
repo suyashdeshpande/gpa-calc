@@ -1,0 +1,183 @@
+<mat-horizontal-stepper labelPosition="bottom" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <div class="mobile-heading"><b>Semester Survived</b></div>
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Semesters Survived</ng-template>
+      <div class="form-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Semester Completed</mat-label>
+          <input type="number" matInput formControlName="firstCtrl" required/>
+          <mat-error
+            *ngIf="firstFormGroup?.controls?.firstCtrl?.errors?.required"
+          >Required
+          </mat-error
+          >
+          <mat-error
+            *ngIf="
+              firstFormGroup?.controls?.firstCtrl?.errors?.pattern ||
+              firstFormGroup?.controls?.firstCtrl?.errors?.max ||
+              firstFormGroup?.controls?.firstCtrl?.errors?.min
+            "
+          >Must be a valid semester
+          </mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <div class="btn-container">
+        <button
+            #firstBtn
+            mat-stroked-button
+            matStepperNext
+            [disabled]="firstFormGroup.controls.firstCtrl?.errors"
+            (click)="gotSemesters()"
+        >
+          <b>Next</b>
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <div class="mobile-heading"><b>Past Blunder's</b></div>
+
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Past Blunder's</ng-template>
+      <div class="form-container">
+        <mat-form-field appearance="outline" *ngFor="let sem of semesterList">
+          <mat-label>Sem {{ sem }} CGPA</mat-label>
+          <input matInput [formControlName]="sem" required/>
+          <mat-error *ngIf="(secondFormGroup?.controls)[sem]?.errors?.required"
+          >Required
+          </mat-error
+          >
+          <mat-error
+            *ngIf="
+              (secondFormGroup?.controls)[sem]?.errors?.min ||
+              (secondFormGroup?.controls)[sem]?.errors?.max ||
+              (secondFormGroup?.controls)[sem]?.errors?.pattern
+            "
+          >Must be a valid CGPA
+          </mat-error
+          >
+          <mat-hint>Upto 2 decimal places</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="btn-container">
+        <button mat-stroked-button matStepperPrevious><b>Back</b></button>
+        <button
+          mat-stroked-button
+          matStepperNext
+          [disabled]="secondFormGroup?.status === 'INVALID'"
+          (click)="gotCgpas()"
+        >
+          <b>Next</b>
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup">
+    <div class="mobile-heading"><b>Goal</b></div>
+
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel>Goal</ng-template>
+      <div class="form-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Target GPA</mat-label>
+          <input
+            type="number"
+            matInput
+            formControlName="expectedCgpa"
+            required
+          />
+          <mat-error
+            *ngIf="thirdFormGroup?.controls?.expectedCgpa?.errors?.required"
+          >Required
+          </mat-error
+          >
+          <mat-error
+            *ngIf="
+              thirdFormGroup?.controls?.expectedCgpa?.errors?.min ||
+              thirdFormGroup?.controls?.expectedCgpa?.errors?.max ||
+              thirdFormGroup?.controls?.expecteCdgpa?.errors?.pattern
+            "
+          >Must be a valid CGPA
+          </mat-error
+          >
+          <mat-hint>Upto 2 decimal places</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Target Semester</mat-label>
+          <input
+            type="number"
+            matInput
+            formControlName="expectedSemester"
+            required
+          />
+          <mat-error
+            *ngIf="thirdFormGroup?.controls?.expectedSemester?.errors?.required"
+          >Required
+          </mat-error
+          >
+          <mat-error
+            *ngIf="
+              thirdFormGroup?.controls?.expectedSemester?.errors?.pattern ||
+              thirdFormGroup?.controls?.expectedSemester?.errors?.max
+            "
+          >Must be a valid semester
+          </mat-error
+          >
+          <mat-error
+            *ngIf="thirdFormGroup?.controls?.expectedSemester?.errors?.min"
+          >Must be greater than semesters completed
+          </mat-error
+          >
+        </mat-form-field>
+      </div>
+      <div class="btn-container">
+        <button mat-stroked-button matStepperPrevious><b>Back</b></button>
+        <button
+          mat-stroked-button
+          matStepperNext
+          (click)="gotExpectedData()"
+          [disabled]="
+            thirdFormGroup?.controls?.expectedCgpa?.errors ||
+            thirdFormGroup?.controls?.expectedSemester?.errors
+          "
+        >
+          <b>Next</b>
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <div class="mobile-heading"><b>Booooommm!!!</b></div>
+
+    <ng-template matStepLabel>Booooommm!!!</ng-template>
+
+    <div class="result-text">
+      <p *ngIf="result > 10">Don't dream about it.. You can't achieve it.</p>
+      <p *ngIf="result <= 0; else resultTemplate">
+        Chill, Your GPA can't be dropped to your expected GPA value no matter
+        how low you score in each coming semester.
+        <br/>
+        <br/>
+        <b>Just pass your exams...!!</b>
+      </p>
+
+      <ng-template #resultTemplate>
+        <p>
+          On an average you need to score <strong>{{ result }}</strong> GPA in
+          each coming semester.
+        </p>
+        <p>
+          On an average you have scored <strong> {{ avg }} </strong> GPA per
+          semester till now.
+        </p>
+      </ng-template>
+    </div>
+    <div class="btn-container result-btn">
+      <button mat-stroked-button matStepperPrevious><b>Back</b></button>
+      <button mat-stroked-button (click)="stepper.reset()"><b>Reset</b></button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
