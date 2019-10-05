@@ -1,13 +1,17 @@
 html {
   height: 100vh;
   width: 100vw;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 body {
   font-family: Roboto, Arial, sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   display: flex;
   justify-content: center;
   height: 100%;
@@ -18,7 +22,8 @@ body {
 
 .basic-container {
   padding: 30px;
-  height: 75%;
+  /*height: 75%;*/
+  height: 90%;
   border-radius: 8px;
   background: white;
   width: 75%;
@@ -40,7 +45,8 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 50vh;
+  /*max-height: 50vh;*/
+  max-height: 65vh;
   /* overflow: auto; */
 }
 
@@ -58,7 +64,8 @@ form {
 }
 
 .form-container {
-  max-height: 50vh;
+  /*max-height: 50vh;*/
+  max-height: 48vh;
   overflow-x: hidden;
   overflow-y: auto;
   justify-content: center;
@@ -120,4 +127,35 @@ mat-form-field {
   to {
     transform: scale(1.1);
   }
+}
+
+.avg-container {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.divider-container {
+  /*position: relative;*/
+  display: flex;
+}
+
+.divider-container div:not(:nth-child(2)) {
+  width: 45%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.divider-container div:nth-child(2) {
+  position: relative;
+  flex-grow: 1;
+  bottom: -0.5rem;
+  color: rgba(0, 0, 0, 0.12);
+}
+
+div[formGroupName="semesters"] {
+  overflow-x: hidden;
+  overflow-y: auto;
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
 }

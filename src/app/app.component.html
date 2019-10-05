@@ -37,37 +37,67 @@
       </div>
     </form>
   </mat-step>
+
+
   <mat-step [stepControl]="secondFormGroup">
     <div class="mobile-heading"><b>Past Blunder's</b></div>
-
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Past Blunder's</ng-template>
       <div class="form-container">
-        <mat-form-field appearance="outline" *ngFor="let sem of semesterList">
-          <mat-label>Sem {{ sem }} CGPA</mat-label>
-          <input matInput [formControlName]="sem" required/>
-          <mat-error *ngIf="(secondFormGroup?.controls)[sem]?.errors?.required"
-          >Required
-          </mat-error
-          >
-          <mat-error
-            *ngIf="
-              (secondFormGroup?.controls)[sem]?.errors?.min ||
-              (secondFormGroup?.controls)[sem]?.errors?.max ||
-              (secondFormGroup?.controls)[sem]?.errors?.pattern
+        <div class="avg-container" *ngIf="semestersSoFar > 1">
+          <mat-form-field appearance="outline">
+            <mat-label>Avg GPA of {{semestersSoFar}} semesters</mat-label>
+            <input matInput required #avgField formControlName="avg">
+            <mat-error *ngIf="(secondFormGroup?.controls?.avg)?.errors?.required"
+            >Required
+            </mat-error
+            >
+            <mat-error
+              *ngIf="
+              (secondFormGroup?.controls?.avg)?.errors?.min ||
+              (secondFormGroup?.controls?.avg)?.errors?.max ||
+              (secondFormGroup?.controls?.avg)?.errors?.pattern
             "
-          >Must be a valid CGPA
-          </mat-error
-          >
-          <mat-hint>Upto 2 decimal places</mat-hint>
-        </mat-form-field>
+            >Must be a valid GPA
+            </mat-error
+            >
+            <mat-hint>Upto 2 decimal places</mat-hint>
+          </mat-form-field>
+
+          <div class="divider-container">
+            <div></div>
+            <div>OR</div>
+            <div></div>
+          </div>
+
+        </div>
+        <div *ngIf="semestersSoFar" formGroupName="semesters">
+          <mat-form-field appearance="outline" *ngFor="let sem of semesterList">
+            <mat-label>Sem {{ sem }} CGPA</mat-label>
+            <input matInput [formControlName]="sem" required/>
+            <mat-error *ngIf="(secondFormGroup?.controls?.semesters['controls'])[sem]?.errors?.required"
+            >Required
+            </mat-error
+            >
+            <mat-error
+              *ngIf="
+              (secondFormGroup?.controls?.semesters['controls'])[sem]?.errors?.min ||
+              (secondFormGroup?.controls?.semesters['controls'])[sem]?.errors?.max ||
+              (secondFormGroup?.controls?.semesters['controls'])[sem]?.errors?.pattern
+            "
+            >Must be a valid CGPA
+            </mat-error
+            >
+            <mat-hint>Upto 2 decimal places</mat-hint>
+          </mat-form-field>
+        </div>
       </div>
       <div class="btn-container">
         <button mat-stroked-button matStepperPrevious><b>Back</b></button>
         <button
           mat-stroked-button
           matStepperNext
-          [disabled]="secondFormGroup?.status === 'INVALID'"
+          [disabled]="!(secondFormGroup?.controls?.semesters?.status === 'VALID' || secondFormGroup?.controls?.avg?.status === 'VALID')"
           (click)="gotCgpas()"
         >
           <b>Next</b>
@@ -75,6 +105,8 @@
       </div>
     </form>
   </mat-step>
+
+
   <mat-step [stepControl]="thirdFormGroup">
     <div class="mobile-heading"><b>Goal</b></div>
 
